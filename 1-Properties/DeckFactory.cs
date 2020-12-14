@@ -13,51 +13,37 @@ namespace Properties
 
         private string[] names;
 
-        // TODO improve
-        public IList<string> GetSeeds()
+        public IList<string> Seeds
         {
-            return this.seeds.ToList();
+            get { return this.seeds.ToList(); }
+            set { this.seeds = value.ToArray(); }
         }
 
-        // TODO improve
-        public void SetSeeds(IList<string> seeds)
+        public IList<string> Names
         {
-            this.seeds = seeds.ToArray();
+            get { return this.names.ToList(); }
+            set { this.names = value.ToArray(); }
         }
 
-        // TODO improve
-        public IList<string> GetNames()
-        {
-            return this.names.ToList();
-        }
-
-        // TODO improve
-        public void SetNames(IList<string> names)
-        {
-            this.names = names.ToArray();
-        }
-
-        // TODO improve
         public int GetDeckSize()
         {
-            return this.names.Length * this.seeds.Length;
+            return this.Names.Count * this.Seeds.Count;
         }
 
-        /// TODO improve
         public ISet<Card> GetDeck()
         {
-            if (this.names == null || this.seeds == null)
+            if (this.Names == null || this.Seeds == null)
             {
                 throw new InvalidOperationException();
             }
 
             return new HashSet<Card>(Enumerable
-                .Range(0, this.names.Length)
+                .Range(0, this.Names.Count)
                 .SelectMany(i => Enumerable
-                    .Repeat(i, this.seeds.Length)
+                    .Repeat(i, this.Seeds.Count)
                     .Zip(
-                        Enumerable.Range(0, this.seeds.Length),
-                        (n, s) => Tuple.Create(this.names[n], this.seeds[s], n)))
+                        Enumerable.Range(0, this.Seeds.Count),
+                        (n, s) => Tuple.Create(this.Names[n], this.Seeds[s], n)))
                 .Select(tuple => new Card(tuple))
                 .ToList());
         }
